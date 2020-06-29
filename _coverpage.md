@@ -5,7 +5,7 @@
 
 [常用资源](https://shimo.im/docs/MuiACIg1HlYfVxrj/)
 [GitHub](http://www.miuu.club/)
-[开始阅读](#java_go)
+[开始阅读](#Java-Go)
 
 
 
