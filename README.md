@@ -1,8 +1,8 @@
 # Java-Go
 
-- 在线阅读地址：https://snailclimb.gitee.io/javaguide-interview/#/
-- Github：https://github.com/Snailclimb/JavaGuide-Interview
-- 码云：https://gitee.com/SnailClimb/JavaGuide-Interview
+- 在线阅读地址：http://yu520zhong.gitee.io/java_go/#/
+- Github：http://www.miuu.club/
+- 码云：https://github.com/yu520zhong/java_go
 
 ## 如何学习本项目
 

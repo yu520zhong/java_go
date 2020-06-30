@@ -5,6 +5,7 @@
 
 * Java
   * [Java基础](./docs/b-1面试题总结-Java基础.md)
+  * [Java知识点](./docs/b-1基础知识点.md)
   * [Java集合](./docs/b-2Java集合.md)
   * [Java多线程](./docs/b-3Java多线程.md)
   * [jvm](./docs/b-4jvm.md)
@@ -26,10 +27,13 @@
   * [Netty](./docs/e-4netty.md)
   * [SpringBoot](./docs/e-4springboot.md)
   * [SpringCloud](./docs/e-5springcloud.md)
+  * [微服务分布式](./docs/e-6微服务分布式.md)
+
+* [微服务](./docs/h-微服务.md)
   
 * [认证授权](./docs/f-1认证授权.md)
 
-* 大厂面经
+* 面经
   * [五面阿里,终获Offer](./docs/interview-experience/a-1五面阿里,终获Offer.md)
   * [蚂蚁金服实习生总结](./docs/interview-experience/a-2蚂蚁金服实习生总结.md)
   * [Bigo的Java面试，我挂在了第三轮技术面上.........](./docs/interview-experience/a-3Bigo的Java面试，我挂在了第三轮技术面上..........md)
@@ -38,9 +42,8 @@
   * [逆风而行！从考研失败到收获到自己满意的Offer,分享一下自己的经历！](./docs/interview-experience/a-6逆风而行！从考研失败到收获到自己满意的Offer,分享一下自己的经历！.md)
   * [a-7Java后端实习面经，电子科大大三读者投稿！看了之后感触颇深！很感动开心！](./docs/interview-experience/a-7Java后端实习面经，电子科大大三读者投稿！看了之后感触颇深！很感动开心！.md)
   
-* [微服务](./docs/h-微服务.md)
 
-* 真实大厂面试现场经历分析
+* 现场经历分析
   * [我和阿里面试官的一次邂逅(上)](./docs/i-1真实大厂面试现场.md)
   * [我和阿里面试官的一次邂逅(下)](./docs/i-2真实大厂面试现场.md)
   
