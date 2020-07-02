@@ -6,7 +6,7 @@
 
 
 
-![img](https://pic3.zhimg.com/80/v2-343dab326d27a47c7adbbbc7a87d3a96_720w.jpg)
+![img](v2-343dab326d27a47c7adbbbc7a87d3a96_720w.jpg)
 
 
 
@@ -24,7 +24,7 @@
 
 
 
-![img](https://pic3.zhimg.com/80/v2-f6e998c5cfedfe8ca3dbbef592785402_720w.jpg)
+![img](v2-f6e998c5cfedfe8ca3dbbef592785402_720w.jpg)
 
 
 
@@ -32,21 +32,15 @@
 
 
 
-![img](https://pic3.zhimg.com/80/v2-952681cacc8d87b8180edf4d32ba1502_720w.jpg)
+![img](v2-952681cacc8d87b8180edf4d32ba1502_720w.jpg)
 
 
-
-
-
-![img](data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1738' height='689'></svg>)
 
 
 
 ### **1.4.基于线程池**
 
-
-
-![img](https://pic3.zhimg.com/80/v2-a2bd189a1ea02fcc81b7d59c0d269af2_720w.jpg)
+![img](v2-a2bd189a1ea02fcc81b7d59c0d269af2_720w.jpg)
 
 
 
@@ -102,7 +96,7 @@ ThreadPoolExecutor 是构建线程的核心方法
 
 
 
-![img](https://pic3.zhimg.com/80/v2-9aeb1f119b894d46816590b170ea6216_720w.jpg)
+![img](v2-9aeb1f119b894d46816590b170ea6216_720w.jpg)
 
 
 
@@ -114,7 +108,7 @@ ThreadPoolExecutor 是构建线程的核心方法
 
 
 
-![img](https://pic3.zhimg.com/80/v2-3df10e33101ac31d90c659dd8598299a_720w.jpg)
+![img](v2-3df10e33101ac31d90c659dd8598299a_720w.jpg)
 
 
 
@@ -142,7 +136,7 @@ AbortPolicy、CallerRunsPolicy、DiscardOldestPolicy、DiscardPolicy 这 4 种
 
 
 
-![img](https://pic3.zhimg.com/80/v2-0e7519cf0d6b4126d38e26bf0c5c37c2_720w.jpeg)
+![img](v2-0e7519cf0d6b4126d38e26bf0c5c37c2_720w.jpeg)
 
 
 
@@ -154,7 +148,7 @@ AbortPolicy、CallerRunsPolicy、DiscardOldestPolicy、DiscardPolicy 这 4 种
 
 ![img](v2-eaa5b1d5f9e3294820b75d5eac23be11_720w.jpg)
 
-![img](https://pic3.zhimg.com/80/v2-2c2e87dbb2ded6892710f2c67ab0a046_720w.jpg)
+![img](v2-2c2e87dbb2ded6892710f2c67ab0a046_720w.jpg)
 
 
 
@@ -182,7 +176,7 @@ AbortPolicy、CallerRunsPolicy、DiscardOldestPolicy、DiscardPolicy 这 4 种
 
 
 
-![img](https://pic3.zhimg.com/80/v2-dc097a77ef67029498294ff94695285a_720w.jpg)
+![img](v2-dc097a77ef67029498294ff94695285a_720w.jpg)
 
 
 
@@ -204,7 +198,7 @@ AbortPolicy、CallerRunsPolicy、DiscardOldestPolicy、DiscardPolicy 这 4 种
 
 
 
-![img](https://pic3.zhimg.com/80/v2-2082723ec4a605c2892cb39db0620be2_720w.jpg)
+![img](v2-2082723ec4a605c2892cb39db0620be2_720w.jpg)
 
 
 
@@ -220,7 +214,7 @@ AbortPolicy、CallerRunsPolicy、DiscardOldestPolicy、DiscardPolicy 这 4 种
 
 分为新建（New）、就绪（Runnable）、运行（Running）、阻塞（Blocked）和死亡（Dead）这 5 种状态
 
-![img](https://pic3.zhimg.com/80/v2-9893304b3659149890d906e80c1befde_720w.jpg)
+![img](v2-9893304b3659149890d906e80c1befde_720w.jpg)
 
 
 
@@ -270,7 +264,7 @@ AbortPolicy、CallerRunsPolicy、DiscardOldestPolicy、DiscardPolicy 这 4 种
 
 
 
-![img](https://pic3.zhimg.com/80/v2-266ce8ab41b95094dc7e5a5d7be0f0d2_720w.jpg)
+![img](v2-266ce8ab41b95094dc7e5a5d7be0f0d2_720w.jpg)
 
 
 
@@ -414,7 +408,7 @@ CountDownLatch 类位于 java.util.concurrent 包下，是一个同步工具类�
 
 
 
-![img](https://pic3.zhimg.com/80/v2-14430b7837c874ff8b4e51035fdc628e_720w.jpg)
+![img](v2-14430b7837c874ff8b4e51035fdc628e_720w.jpg)
 
 
 
