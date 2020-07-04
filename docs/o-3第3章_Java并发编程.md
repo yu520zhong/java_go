@@ -30,11 +30,52 @@
 
 ### **1.3.通过ExectorService和Callable<Class>实现有返回值的线程**
 
+``` java
 
+/**
+ * 通过ExectorService和Callable<Class>实现有返回值的线程
+ */
+//step 1:通过实现Callable接口创建MyCallable线程
+public class MyCallable implements Callable<String> {
+    private String name;
 
-![img](v2-952681cacc8d87b8180edf4d32ba1502_720w.jpg)
+    public MyCallable(String name) {
+        this.name = name;
+    }
 
+    @Override
+    public String call() throws Exception {
+        return name;
+    }
 
+}
+
+ class Test {
+     public static void main(String[] args) throws Exception {
+         // step2: 创建一个固定大小为5的线程
+         ExecutorService pool = Executors.newFixedThreadPool(5);
+         // step3: 创建多个有返回值的任务列表list
+         List<Future> list = new ArrayList<Future>();
+
+         for (int i = 0; i < 5; i++) {
+             //step4: 创建一个有返回值的线程实例
+             Callable c = new MyCallable(i + "");
+             //step 5:提交线程,获取Future对象并将其保存到Future List中
+             Future future = pool.submit(c);
+             System.out.println("submit a callable thread:" + i);
+             list.add(future);
+         }
+         //step6: 关闭线程池,等待线程执行结束
+         pool.shutdown();
+
+         //step7: 遍历所有线程的运行结果
+         for (Future future : list) {
+             //从Future对象上获取任务的返回值,并将结果输出到控制台
+             System.out.println("get the result from callable thread:" + future.get().toString());
+         }
+     }
+}
+```
 
 
 
