@@ -132,6 +132,63 @@ Java8对此进行了优化。当链表中的元素超过8个以后，会将链�
 
 
 
+**hashmap1.8 当链表为8时会转化为红黑树 当为6时又会退化为链表 问：为什么是8？ 为什么是6？**
+
+首先是时间和空间的权衡
+当链表长度为6时 查询的平均长度为 n/2=3
+ 红黑树为 log(6)=2.6
+ 为8时 ：  链表  8/2=4
+                红黑树   log(8)=3
+
+``` java
+/**
+ * The bin count threshold for using a tree rather than list for a
+ * bin.  Bins are converted to trees when adding an element to a
+ * bin with at least this many nodes. The value must be greater
+ * than 2 and should be at least 8 to mesh with assumptions in
+ * tree removal about conversion back to plain bins upon shrinkage.
+ */
+static final int TREEIFY_THRESHOLD = 8;
+这段注释只说明了8是bin（bin就是bucket，即HashMap中hashCode值一样的元素保存的地方）从链表转成树的阈值，但是并没有说明为什么是8。 
+```
+
+接着他有这么一段 This map usually acts as a binned (bucketed) hash table, but
+when bins get too large, they are transformed into bins of TreeNodes,
+each structured similarly to those in java.util.TreeMap
+TreeNodes占用空间是普通Nodes的两倍，所以只有当bin包含足够多的节点时才会转成TreeNodes，而是否足够多就是由TREEIFY_THRESHOLD的值决定的。当bin中节点数变少时，又会转成普通的bin。这样就解析了为什么不是一开始就将其转换为TreeNodes，而是需要一定节点数才转为TreeNodes，说白了就是trade-off，空间和时间的权衡
+
+``` 
+Because TreeNodes are about twice the size of regular nodes, we
+use them only when bins contain enough nodes to warrant use
+(see TREEIFY_THRESHOLD). And when they become too small (due to
+removal or resizing) they are converted back to plain bins.  In
+usages with well-distributed user hashCodes, tree bins are
+rarely used.  Ideally, under random hashCodes, the frequency of
+nodes in bins follows a Poisson distribution
+(http://en.wikipedia.org/wiki/Poisson_distribution) with a
+parameter of about 0.5 on average for the default resizing
+threshold of 0.75, although with a large variance because of
+resizing granularity. Ignoring variance, the expected
+occurrences of list size k are (exp(-0.5)*pow(0.5, k)/factorial(k)). 
+The first values are:
+0:    0.60653066
+1:    0.30326533
+2:    0.07581633
+3:    0.01263606
+4:    0.00157952
+5:    0.00015795
+6:    0.00001316
+7:    0.00000094
+8:    0.00000006
+more: less than 1 in ten million
+```
+
+我们可以看到，一个bin中链表长度达到8个元素的概率为0.00000006，几乎是不可能事件。
+
+所以，之所以选择8，不是拍脑袋决定的，而是根据概率统计决定的。
+
+选择6 也是基于时间和空间的考虑  红黑树的平均查找长度是log(n)，链表的速度是 n/2 ，还有选择6和8，中间有个差值7可以有效防止链表和树频繁转换。假设一下，如果设计成链表个数超过8则链表转换成树结构，链表个数小于8则树结构转换成链表，如果一个HashMap不停的插入、删除元素，链表个数在8左右徘徊，就会频繁的发生树转链表、链表转树，效率会很低。
+
 
 
 ### **ConcurrentHashMap**
