@@ -2,549 +2,240 @@
 
 ## 5.5 SpringBoot
 
-Netty 总算总结完了，Guide 也是长舒了一口气。有太多读者私信我让我总结 Netty 了，因为经常会在面试中碰到 Netty 相关的问题。
 
-全文采用大家喜欢的与面试官对话的形式展开。 如果大家觉得 Guide 总结的不错的话，不妨向好朋友们推荐一下 JavaGuide，这是最好礼物，哈哈！
 
-### 5.4.1 Netty 是什么？
+### 1.什么是 Spring Boot ?
 
-👨‍💻**面试官** ：介绍一下自己对 Netty 的认识吧！小伙子。
+传统的 SSM/SSH 框架组合配置繁琐臃肿，不同项目有很多重复、模板化的配置，严重降低了 Java 工程师的开发效率，而 Spring Boot 可以轻松创建基于 Spring 的、可以独立运行的、生产级的应用程序。通过对 Spring 家族和一些第三方库提供一系列自动化配置的 Starter，来使得开发快速搭建一个基于 Spring 的应用程序。
 
-🙋 **我** ：好的！那我就简单用 3 点来概括一下 Netty 吧！
+Spring Boot 让日益臃肿的 Java 代码又重回简洁。在配合 Spring Cloud 使用时，还可以发挥更大的威力。
 
-1. Netty 是一个 **基于 NIO** 的 client-server(客户端服务器)框架，使用它可以快速简单地开发网络应用程序。
-2. 它极大地简化并优化了 TCP 和 UDP 套接字服务器等网络编程,并且性能以及安全性等很多方面甚至都要更好。
-3. **支持多种协议** 如 FTP，SMTP，HTTP 以及各种二进制和基于文本的传统协议。
+### 2.Spring Boot 有哪些特点 ?
 
-用官方的总结就是：**Netty 成功地找到了一种在不妥协可维护性和性能的情况下实现易于开发，性能，稳定性和灵活性的方法。**
+Spring Boot 主要有如下特点：
 
-除了上面介绍的之外，很多开源项目比如我们常用的 Dubbo、RocketMQ、Elasticsearch、gRPC 等等都用到了 Netty。
+1. 为 Spring 开发提供一个更快、更广泛的入门体验。
+2. 开箱即用，远离繁琐的配置。
+3. 提供了一系列大型项目通用的非业务性功能，例如：内嵌服务器、安全管理、运行数据监控、运行状况检查和外部化配置等。
+4. 绝对没有代码生成，也不需要XML配置。
 
-_网络编程我愿意称中 Netty 为王 。_
+### 3.Spring Boot 中的 starter 到底是什么 ?
 
-### 5.4.2 为什么要用 Netty？
+首先，这个 Starter 并非什么新的技术点，基本上还是基于 Spring 已有功能来实现的。首先它提供了一个自动化配置类，一般命名为 `XXXAutoConfiguration` ，在这个配置类中通过条件注解来决定一个配置是否生效（条件注解就是 Spring 中原本就有的），然后它还会提供一系列的默认配置，也允许开发者根据实际情况自定义相关配置，然后通过类型安全的属性注入将这些配置属性注入进来，新注入的属性会代替掉默认属性。正因为如此，很多第三方框架，我们只需要引入依赖就可以直接使用了。
 
-👨‍💻**面试官** ：为什么要用 Netty 呢？能不能说一下自己的看法。
+当然，开发者也可以自定义 Starter，自定义 Starter 可以参考：[徒手撸一个 Spring Boot 中的 Starter ，解密自动化配置黑魔法！](https://mp.weixin.qq.com/s/tKr_shLQnvcQADr4mvcU3A)。
 
-🙋 **我** ：因为 Netty 具有下面这些优点，并且相比于直接使用 JDK 自带的 NIO 相关的 API 来说更加易用。
+### 4.spring-boot-starter-parent 有什么用 ?
 
-- 统一的 API，支持多种传输类型，阻塞和非阻塞的。
-- 简单而强大的线程模型。
-- 自带编解码器解决 TCP 粘包/拆包问题。
-- 自带各种协议栈。
-- 真正的无连接数据包套接字支持。
-- 比直接使用 Java 核心 API 有更高的吞吐量、更低的延迟、更低的资源消耗和更少的内存复制。
-- 安全性不错，有完整的 SSL/TLS 以及 StartTLS 支持。
-- 社区活跃
-- 成熟稳定，经历了大型项目的使用和考验，而且很多开源项目都使用到了 Netty， 比如我们经常接触的 Dubbo、RocketMQ 等等。
-- ......
+我们都知道，新创建一个 Spring Boot 项目，默认都是有 parent 的，这个 parent 就是 spring-boot-starter-parent ，spring-boot-starter-parent 主要有如下作用：
 
-### 5.4.3 Netty 应用场景了解么？
+1. 定义了 Java 编译版本为 1.8 。
+2. 使用 UTF-8 格式编码。
+3. 继承自 spring-boot-dependencies，这个里边定义了依赖的版本，也正是因为继承了这个依赖，所以我们在写依赖时才不需要写版本号。
+4. 执行打包操作的配置。
+5. 自动化的资源过滤。
+6. 自动化的插件配置。
+7. 针对 application.properties 和 application.yml 的资源过滤，包括通过 profile 定义的不同环境的配置文件，例如 application-dev.properties 和 application-dev.yml。
 
-👨‍💻**面试官** ：能不能通俗地说一下使用 Netty 可以做什么事情？
+关于这个问题，读者可以参考：[你真的理解 Spring Boot 项目中的 parent 吗？](https://mp.weixin.qq.com/s/2w6B4fMdbTK_mGjnaMG4BQ)
 
-🙋 **我** ：凭借自己的了解，简单说一下吧！理论上来说，NIO 可以做的事情 ，使用 Netty 都可以做并且更好。Netty 主要用来做**网络通信** :
+### 5.YAML 配置的优势在哪里 ?
 
-1. **作为 RPC 框架的网络通信工具** ： 我们在分布式系统中，不同服务节点之间经常需要相互调用，这个时候就需要 RPC 框架了。不同服务节点之间的通信是如何做的呢？可以使用 Netty 来做。比如我调用另外一个节点的方法的话，至少是要让对方知道我调用的是哪个类中的哪个方法以及相关参数吧！
-2. **实现一个自己的 HTTP 服务器** ：通过 Netty 我们可以自己实现一个简单的 HTTP 服务器，这个大家应该不陌生。说到 HTTP 服务器的话，作为 Java 后端开发，我们一般使用 Tomcat 比较多。一个最基本的 HTTP 服务器可要以处理常见的 HTTP Method 的请求，比如 POST 请求、GET 请求等等。
-3. **实现一个即时通讯系统** ： 使用 Netty 我们可以实现一个可以聊天类似微信的即时通讯系统，这方面的开源项目还蛮多的，可以自行去 Github 找一找。
-4. **实现消息推送系统\*\* ：市面上有很多消息推送系统都是基于 Netty 来做的。
-5. ......
+YAML 现在可以算是非常流行的一种配置文件格式了，无论是前端还是后端，都可以见到 YAML 配置。那么 YAML 配置和传统的 properties 配置相比到底有哪些优势呢？
 
-### 5.4.4Netty 核心组件有哪些？分别有什么作用？
+1. 配置有序，在一些特殊的场景下，配置有序很关键
+2. 支持数组，数组中的元素可以是基本数据类型也可以是对象
+3. 简洁
 
-👨‍💻**面试官** ：Netty 核心组件有哪些？分别有什么作用？
+相比 properties 配置文件，YAML 还有一个缺点，就是不支持 @PropertySource 注解导入自定义的 YAML 配置。
 
-🙋 **我** ：表面上，嘴上开始说起 Netty 的核心组件有哪些，实则，内心已经开始 mmp 了，深度怀疑这面试官是存心搞我啊！
+关于 YAML 配置，要是大家还不熟悉，可以参考: [Spring Boot 中的 yaml 配置简介](https://mp.weixin.qq.com/s/dbSBzFICIDPLkj5Tuv2-yA)
 
-#### 1.Channel
+### 6.Spring Boot 中如何解决跨域问题 ?
 
-`Channel` 接口是 Netty 对网络操作抽象类，它除了包括基本的 I/O 操作，如 `bind()`、`connect()`、`read()`、`write()` 等。
+跨域可以在前端通过 JSONP 来解决，但是 JSONP 只可以发送 GET 请求，无法发送其他类型的请求，在 RESTful 风格的应用中，就显得非常鸡肋，因此我们推荐在后端通过 （CORS，Cross-origin resource sharing） 来解决跨域问题。这种解决方案并非 Spring Boot 特有的，在传统的 SSM 框架中，就可以通过 CORS 来解决跨域问题，只不过之前我们是在 XML 文件中配置 CORS ，现在则是通过 @CrossOrigin 注解来解决跨域问题。关于 CORS ，小伙伴们可以参考：[Spring Boot 中通过 CORS 解决跨域问题](https://mp.weixin.qq.com/s/ASEJwiswLu1UCRE-e2twYQ)
 
-比较常用的`Channel`接口实现类是`NioServerSocketChannel`（服务端）和`NioSocketChannel`（客户端），这两个 `Channel` 可以和 BIO 编程模型中的`ServerSocket`以及`Socket`两个概念对应上。Netty 的 `Channel` 接口所提供的 API，大大地降低了直接使用 Socket 类的复杂性。
+### 7.比较一下 Spring Security 和 Shiro 各自的优缺点 ?
 
-#### 2.EventLoop
+由于 Spring Boot 官方提供了大量的非常方便的开箱即用的 Starter ，包括 Spring Security 的 Starter ，使得在 Spring Boot 中使用 Spring Security 变得更加容易，甚至只需要添加一个依赖就可以保护所有的接口，所以，如果是 Spring Boot 项目，一般选择 Spring Security 。当然这只是一个建议的组合，单纯从技术上来说，无论怎么组合，都是没有问题的。Shiro 和 Spring Security 相比，主要有如下一些特点：
 
-这么说吧！`EventLoop`（事件循环）接口可以说是 Netty 中最核心的概念了！
+1. Spring Security 是一个重量级的安全管理框架；Shiro 则是一个轻量级的安全管理框架
+2. Spring Security 概念复杂，配置繁琐；Shiro 概念简单、配置简单
+3. Spring Security 功能强大；Shiro 功能简单
 
-《Netty 实战》这本书是这样介绍它的：
+### 8.微服务中如何实现 session 共享 ?
 
-> `EventLoop` 定义了 Netty 的核心抽象，用于处理连接的生命周期中所发生的事件。
+在微服务中，一个完整的项目被拆分成多个不相同的独立的服务，各个服务独立部署在不同的服务器上，各自的 session 被从物理空间上隔离开了，但是经常，我们需要在不同微服务之间共享 session ，常见的方案就是 Spring Session + Redis 来实现 session 共享。将所有微服务的 session 统一保存在 Redis 上，当各个微服务对 session 有相关的读写操作时，都去操作 Redis 上的 session 。这样就实现了 session 共享，Spring Session 基于 Spring 中的代理过滤器实现，使得 session 的同步操作对开发人员而言是透明的，非常简便。 session 共享大家可以参考：[Spring Boot 一个依赖搞定 session 共享，没有比这更简单的方案了！](https://mp.weixin.qq.com/s/xs67SzSkMLz6-HgZVxTDFw)
 
-![](https://imgkr.cn-bj.ufileos.com/10f14c78-5d3d-4c1c-b8b9-5d507152ef69.png)
+### 9.Spring Boot 如何实现热部署 ?
 
-是不是很难理解？说实话，我学习 Netty 的时候看到这句话是没太能理解的。
+Spring Boot 实现热部署其实很容易，引入 devtools 依赖即可，这样当编译文件发生变化时，Spring Boot 就会自动重启。在 Eclipse 中，用户按下保存按键，就会自动编译进而重启 Spring Boot，IDEA 中由于是自动保存的，自动保存时并未编译，所以需要开发者按下 Ctrl+F9 进行编译，编译完成后，项目就自动重启了。
 
-说白了，**`EventLoop` 的主要作用实际就是负责监听网络事件并调用事件处理器进行相关 I/O 操作的处理。**
+如果仅仅只是页面模板发生变化，Java 类并未发生变化，此时可以不用重启 Spring Boot，使用 LiveReload 插件就可以轻松实现热部署。
 
-那 `Channel` 和 `EventLoop` 直接有啥联系呢？
+### 10.Spring Boot 中如何实现定时任务 ?
 
-`Channel` 为 Netty 网络操作(读写等操作)抽象类，`EventLoop` 负责处理注册到其上的`Channel` 处理 I/O 操作，两者配合参与 I/O 操作。
+定时任务也是一个常见的需求，Spring Boot 中对于定时任务的支持主要还是来自 Spring 框架。
 
-#### 3.ChannelFuture
+在 Spring Boot 中使用定时任务主要有两种不同的方式，一个就是使用 Spring 中的 @Scheduled 注解，另一个则是使用第三方框架 Quartz。
 
-Netty 是异步非阻塞的，所有的 I/O 操作都为异步的。
+使用 Spring 中的 @Scheduled 的方式主要通过 @Scheduled 注解来实现。
 
-因此，我们不能立刻得到操作是否执行成功，但是，你可以通过 `ChannelFuture` 接口的 `addListener()` 方法注册一个 `ChannelFutureListener`，当操作执行成功或者失败时，监听就会自动触发返回结果。
+使用 Quartz ，则按照 Quartz 的方式，定义 Job 和 Trigger 即可。
 
-并且，你还可以通过`ChannelFuture` 的 `channel()` 方法获取关联的`Channel`
+关于定时任务这一块，大家可以参考：[Spring Boot 中实现定时任务的两种方式!](https://mp.weixin.qq.com/s/_20RYBkjKrB4tdpXI3hBOA)
+
+### 11.前后端分离，如何维护接口文档 ?
+
+前后端分离开发日益流行，大部分情况下，我们都是通过 Spring Boot 做前后端分离开发，前后端分离一定会有接口文档，不然会前后端会深深陷入到扯皮中。一个比较笨的方法就是使用 word 或者 md 来维护接口文档，但是效率太低，接口一变，所有人手上的文档都得变。在 Spring Boot 中，这个问题常见的解决方案是 Swagger ，使用 Swagger 我们可以快速生成一个接口文档网站，接口一旦发生变化，文档就会自动更新，所有开发工程师访问这一个在线网站就可以获取到最新的接口文档，非常方便。关于 Swagger 的用法，大家可以参考：[SpringBoot整合Swagger2，再也不用维护接口文档了！](https://mp.weixin.qq.com/s/iTsTqEeqT9K84S091ycdog)
+
+### 12.什么是 Spring Data ?
+
+Spring Data 是 Spring 的一个子项目。用于简化数据库访问，支持NoSQL 和 关系数据存储。其主要目标是使数据库的访问变得方便快捷。Spring Data 具有如下特点：
+
+1. SpringData 项目支持 NoSQL 存储：
+2. MongoDB （文档数据库）
+3. Neo4j（图形数据库）
+4. Redis（键/值存储）
+5. Hbase（列族数据库）
+
+SpringData 项目所支持的关系数据存储技术：
+
+1. JDBC
+2. JPA
+
+Spring Data Jpa 致力于减少数据访问层 (DAO) 的开发量. 开发者唯一要做的，就是声明持久层的接口，其他都交给 Spring Data JPA 来帮你完成！Spring Data JPA 通过规范方法的名字，根据符合规范的名字来确定方法需要实现什么样的逻辑。
+
+### 13.Spring Boot 是否可以使用 XML 配置 ?
+
+Spring Boot 推荐使用 Java 配置而非 XML 配置，但是 Spring Boot 中也可以使用 XML 配置，通过 @ImportResource 注解可以引入一个 XML 配置。
+
+### 14.Spring Boot 打成的 jar 和普通的 jar 有什么区别 ?
+
+Spring Boot 项目最终打包成的 jar 是可执行 jar ，这种 jar 可以直接通过 `java -jar xxx.jar` 命令来运行，这种 jar 不可以作为普通的 jar 被其他项目依赖，即使依赖了也无法使用其中的类。
+
+Spring Boot 的 jar 无法被其他项目依赖，主要还是他和普通 jar 的结构不同。普通的 jar 包，解压后直接就是包名，包里就是我们的代码，而 Spring Boot 打包成的可执行 jar 解压后，在 `\BOOT-INF\classes` 目录下才是我们的代码，因此无法被直接引用。如果非要引用，可以在 pom.xml 文件中增加配置，将 Spring Boot 项目打包成两个 jar ，一个可执行，一个可引用。
+
+### 15.bootstrap.properties 和 application.properties 有何区别 ?
+
+单纯做 Spring Boot 开发，可能不太容易遇到 bootstrap.properties 配置文件，但是在结合 Spring Cloud 时，这个配置就会经常遇到了，特别是在需要加载一些远程配置文件的时侯。
+
+bootstrap.properties 在 application.properties 之前加载，配置在应用程序上下文的引导阶段生效。一般来说我们在 Spring Cloud Config 或者 Nacos 中会用到它。bootstrap.properties 被 Spring ApplicationContext 的父类加载，这个类先于加载 application.properties 的 ApplicatonContext 启动。
+
+当然，前面叙述中的 properties 也可以修改为 yaml 。
+
+
+
+### 16、Spring Boot 的自动配置是如何实现的？
+
+Spring Boot 项目的启动注解是：@SpringBootApplication，其实它就是由下面三个注解组成的：
+
+- @Configuration
+- @ComponentScan
+- @EnableAutoConfiguration
+
+其中 @EnableAutoConfiguration 是实现自动配置的入口，该注解又通过 @Import 注解导入了AutoConfigurationImportSelector，在该类中加载 META-INF/spring.factories 的配置信息。然后筛选出以 EnableAutoConfiguration 为 key 的数据，加载到 IOC 容器中，实现自动配置功能！
+
+### 17、微服务同时调用多个接口，怎么支持事务的啊？
+
+支持分布式事务，可以使用Spring Boot集成 Aatomikos来解决，但是我一般不建议这样使用，因为使用分布式事务会增加请求的响应时间，影响系统的TPS。一般在实际工作中，会利用消息的补偿机制来处理分布式的事务。
+
+### 18、shiro和oauth还有cas他们之间的关系是什么？问下您公司权限是如何设计，还有就是这几个概念的区别。
+
+cas和oauth是一个解决单点登录的组件，shiro主要是负责权限安全方面的工作，所以功能点不一致。但往往需要单点登陆和权限控制一起来使用，所以就有 cas+shiro或者oauth+shiro这样的组合。
+
+token一般是客户端登录后服务端生成的令牌，每次访问服务端会进行校验，一般保存到内存即可，也可以放到其他介质；redis可以做Session共享，如果前端web服务器有几台负载，但是需要保持用户登录的状态，这场景使用比较常见。
+
+我们公司使用oauth+shiro这样的方式来做后台权限的管理，oauth负责多后台统一登录认证，shiro负责给登录用户赋予不同的访问权限。
+
+### 19、各服务之间通信，对Restful和Rpc这2种方式如何做选择？
+
+在传统的SOA治理中，使用rpc的居多；Spring Cloud默认使用restful进行服务之间的通讯。rpc通讯效率会比restful要高一些，但是对于大多数公司来讲，这点效率影响甚微。我建议使用restful这种方式，易于在不同语言实现的服务之间通讯。
+
+### 20、怎么设计无状态服务？
+
+对于无状态服务，首先说一下什么是状态：如果一个数据需要被多个服务共享，才能完成一笔交易，那么这个数据被称为状态。进而依赖这个“状态”数据的服务被称为有状态服务，反之称为无状态服务。
+
+那么这个无状态服务原则并不是说在微服务架构里就不允许存在状态，表达的真实意思是要把有状态的业务服务改变为无状态的计算类服务，那么状态数据也就相应的迁移到对应的“有状态数据服务”中。
+
+场景说明：例如我们以前在本地内存中建立的数据缓存、Session缓存，到现在的微服务架构中就应该把这些数据迁移到分布式缓存中存储，让业务服务变成一个无状态的计算节点。迁移后，就可以做到按需动态伸缩，微服务应用在运行时动态增删节点，就不再需要考虑缓存数据如何同步的问题。
+
+### 21、Spring Cache 三种常用的缓存注解和意义？
+
+@Cacheable ，用来声明方法是可缓存，将结果存储到缓存中以便后续使用相同参数调用时不需执行实际的方法，直接从缓存中取值。
+
+@CachePut，使用 @CachePut 标注的方法在执行前，不会去检查缓存中是否存在之前执行过的结果，而是每次都会执行该方法，并将执行结果以键值对的形式存入指定的缓存中。
+
+@CacheEvict，是用来标注在需要清除缓存元素的方法或类上的，当标记在一个类上时表示其中所有的方法的执行都会触发缓存的清除操作。
+
+### 22、Spring Boot 如何设置支持跨域请求？
+
+现代浏览器出于安全的考虑， HTTP 请求时必须遵守同源策略，否则就是跨域的 HTTP 请求，默认情况下是被禁止的，IP（域名）不同、或者端口不同、协议不同（比如 HTTP、HTTPS）都会造成跨域问题。
+
+一般前端的解决方案有：
+
+- ① 使用 JSONP 来支持跨域的请求，JSONP 实现跨域请求的原理简单的说，就是动态创建`<script>`标签，然后利用`<script>`的 SRC 不受同源策略约束来跨域获取数据。缺点是需要后端配合输出特定的返回信息。
+- ② 利用反应代理的机制来解决跨域的问题，前端请求的时候先将请求发送到同源地址的后端，通过后端请求转发来避免跨域的访问。
+
+后来 HTML5 支持了 CORS 协议。CORS 是一个 W3C 标准，全称是”跨域资源共享”（Cross-origin resource sharing），允许浏览器向跨源服务器，发出 XMLHttpRequest 请求，从而克服了 AJAX 只能同源使用的限制。它通过服务器增加一个特殊的 Header[Access-Control-Allow-Origin]来告诉客户端跨域的限制，如果浏览器支持 CORS、并且判断 Origin 通过的话，就会允许 XMLHttpRequest 发起跨域请求。
+
+前端使用了 CORS 协议，就需要后端设置支持非同源的请求，Spring Boot 设置支持非同源的请求有两种方式。
+
+**第一，配置 CorsFilter。**
 
 ```java
-public interface ChannelFuture extends Future<Void> {
-    Channel channel();
+@Configuration
+public class GlobalCorsConfig {
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+          config.addAllowedOrigin("*");
+          config.setAllowCredentials(true);
+          config.addAllowedMethod("*");
+          config.addAllowedHeader("*");
+          config.addExposedHeader("*");
 
-    ChannelFuture addListener(GenericFutureListener<? extends Future<? super Void>> var1);
-     ......
+        UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
+        configSource.registerCorsConfiguration("/**", config);
 
-    ChannelFuture sync() throws InterruptedException;
+        return new CorsFilter(configSource);
+    }
 }
 ```
 
-另外，我们还可以通过 `ChannelFuture` 接口的 `sync()`方法让异步的操作变成同步的。
+需要配置上述的一段代码。第二种方式稍微简单一些。
 
-#### 4.ChannelHandler 和 ChannelPipeline
-
-下面这段代码使用过 Netty 的小伙伴应该不会陌生，我们指定了序列化编解码器以及自定义的 `ChannelHandler` 处理消息。
+**第二，在启动类上添加：**
 
 ```java
-        b.group(eventLoopGroup)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel ch) {
-                        ch.pipeline().addLast(new NettyKryoDecoder(kryoSerializer, RpcResponse.class));
-                        ch.pipeline().addLast(new NettyKryoEncoder(kryoSerializer, RpcRequest.class));
-                        ch.pipeline().addLast(new KryoClientHandler());
-                    }
-                });
+public class Application extends WebMvcConfigurerAdapter {  
+
+    @Override  
+    public void addCorsMappings(CorsRegistry registry) {  
+
+        registry.addMapping("/**")  
+                .allowCredentials(true)  
+                .allowedHeaders("*")  
+                .allowedOrigins("*")  
+                .allowedMethods("*");  
+
+    }  
+}  
 ```
 
-`ChannelHandler` 是消息的具体处理器。他负责处理读写操作、客户端连接等事情。
 
-`ChannelPipeline` 为 `ChannelHandler` 的链，提供了一个容器并定义了用于沿着链传播入站和出站事件流的 API 。当 `Channel` 被创建时，它会被自动地分配到它专属的 `ChannelPipeline`。
 
-我们可以在 `ChannelPipeline` 上通过 `addLast()` 方法添加一个或者多个`ChannelHandler` ，因为一个数据或者事件可能会被多个 Handler 处理。当一个 `ChannelHandler` 处理完之后就将数据交给下一个 `ChannelHandler` 。
+### 23、Spring 、Spring Boot 和 Spring Cloud 的关系?
 
-### 5.4.5 EventloopGroup 了解么?和 EventLoop 啥关系?
+Spring 最初最核心的两大核心功能 Spring Ioc 和 Spring Aop 成就了 Spring，Spring 在这两大核心的功能上不断的发展，才有了 Spring 事务、Spring Mvc 等一系列伟大的产品，最终成就了 Spring 帝国，到了后期 Spring 几乎可以解决企业开发中的所有问题。
 
-👨‍💻**面试官** ：刚刚你也介绍了 `EventLoop`。那你再说说 `EventloopGroup` 吧！和 EventLoop 啥关系?
+Spring Boot 是在强大的 Spring 帝国生态基础上面发展而来，发明 Spring Boot 不是为了取代 Spring ,是为了让人们更容易的使用 Spring 。
 
-🙋 **我** ：
+Spring Cloud 是一系列框架的有序集合。它利用 Spring Boot 的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、消息总线、负载均衡、断路器、数据监控等，都可以用 Spring Boot 的开发风格做到一键启动和部署。
 
-![](https://imgkr.cn-bj.ufileos.com/2a5a4a71-cfb7-4735-bf5c-6a57007c82ec.png)
+Spring Cloud 是为了解决微服务架构中服务治理而提供的一系列功能的开发框架，并且 Spring Cloud 是完全基于 Spring Boot 而开发，Spring Cloud 利用 Spring Boot 特性整合了开源行业中优秀的组件，整体对外提供了一套在微服务架构中服务治理的解决方案。
 
-`EventLoopGroup` 包含多个 `EventLoop`（每一个 `EventLoop` 通常内部包含一个线程），上面我们已经说了 `EventLoop` 的主要作用实际就是负责监听网络事件并调用事件处理器进行相关 I/O 操作的处理。
+用一组不太合理的包含关系来表达它们之间的关系。
 
-并且 `EventLoop` 处理的 I/O 事件都将在它专有的 `Thread` 上被处理，即 `Thread` 和 `EventLoop` 属于 1 : 1 的关系，从而保证线程安全。
+Spring ioc/aop > Spring > Spring Boot > Spring Cloud
 
-上图是一个服务端对 `EventLoopGroup` 使用的大致模块图，其中 `Boss EventloopGroup` 用于接收连接，`Worker EventloopGroup` 用于具体的处理（消息的读写以及其他逻辑处理）。
-
-从上图可以看出： 当客户端通过 `connect` 方法连接服务端时，`bossGroup` 处理客户端连接请求。当客户端处理完成后，会将这个连接提交给 `workerGroup` 来处理，然后 `workerGroup` 负责处理其 IO 相关操作。
-
-### 5.4.6 Bootstrap 和 ServerBootstrap 了解么？
-
-👨‍💻**面试官** ：你再说说自己对 `Bootstrap` 和 `ServerBootstrap` 的了解吧！
-
-🙋 **我** ：
-
-`Bootstrap` 是客户端的启动引导类/辅助类，具体使用方法如下：
-
-```java
-        EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            //创建客户端启动引导/辅助类：Bootstrap
-            Bootstrap b = new Bootstrap();
-            //指定线程模型
-            b.group(group).
-                    ......
-            // 尝试建立连接
-            ChannelFuture f = b.connect(host, port).sync();
-            f.channel().closeFuture().sync();
-        } finally {
-            // 优雅关闭相关线程组资源
-            group.shutdownGracefully();
-        }
-```
-
-`ServerBootstrap` 客户端的启动引导类/辅助类，具体使用方法如下：
-
-```java
-        // 1.bossGroup 用于接收连接，workerGroup 用于具体的处理
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            //2.创建服务端启动引导/辅助类：ServerBootstrap
-            ServerBootstrap b = new ServerBootstrap();
-            //3.给引导类配置两大线程组,确定了线程模型
-            b.group(bossGroup, workerGroup).
-                   ......
-            // 6.绑定端口
-            ChannelFuture f = b.bind(port).sync();
-            // 等待连接关闭
-            f.channel().closeFuture().sync();
-        } finally {
-            //7.优雅关闭相关线程组资源
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
-        }
-    }
-```
-
-从上面的示例中，我们可以看出：
-
-1. `Bootstrap` 通常使用 `connet()` 方法连接到远程的主机和端口，作为一个 Netty TCP 协议通信中的客户端。另外，`Bootstrap` 也可以通过 `bind()` 方法绑定本地的一个端口，作为 UDP 协议通信中的一端。
-2. `ServerBootstrap`通常使用 `bind()` 方法绑定本地的端口上，然后等待客户端的连接。
-3. `Bootstrap` 只需要配置一个线程组— `EventLoopGroup` ,而 `ServerBootstrap`需要配置两个线程组— `EventLoopGroup` ，一个用于接收连接，一个用于具体的处理。
-
-### 5.4.7 NioEventLoopGroup 默认的构造函数会起多少线程？
-
-👨‍💻**面试官** ：看过 Netty 的源码了么？`NioEventLoopGroup` 默认的构造函数会起多少线程呢？
-
-🙋 **我** ：嗯嗯！看过部分。
-
-回顾我们在上面写的服务器端的代码：
-
-```java
-// 1.bossGroup 用于接收连接，workerGroup 用于具体的处理
-EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-EventLoopGroup workerGroup = new NioEventLoopGroup();
-```
-
-为了搞清楚`NioEventLoopGroup` 默认的构造函数 到底创建了多少个线程，我们来看一下它的源码。
-
-```java
-    /**
-     * 无参构造函数。
-     * nThreads:0
-     */
-    public NioEventLoopGroup() {
-        //调用下一个构造方法
-        this(0);
-    }
-
-    /**
-     * Executor：null
-     */
-    public NioEventLoopGroup(int nThreads) {
-        //继续调用下一个构造方法
-        this(nThreads, (Executor) null);
-    }
-
-    //中间省略部分构造函数
-
-    /**
-     * RejectedExecutionHandler（）：RejectedExecutionHandlers.reject()
-     */
-    public NioEventLoopGroup(int nThreads, Executor executor, final SelectorProvider selectorProvider,final SelectStrategyFactory selectStrategyFactory) {
-       //开始调用父类的构造函数
-        super(nThreads, executor, selectorProvider, selectStrategyFactory, RejectedExecutionHandlers.reject());
-    }
-
-```
-
-一直向下走下去的话，你会发现在 `MultithreadEventLoopGroup` 类中有相关的指定线程数的代码，如下：
-
-```java
-    // 从1，系统属性，CPU核心数*2 这三个值中取出一个最大的
-    //可以得出 DEFAULT_EVENT_LOOP_THREADS 的值为CPU核心数*2
-    private static final int DEFAULT_EVENT_LOOP_THREADS = Math.max(1, SystemPropertyUtil.getInt("io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2));
-
-    // 被调用的父类构造函数，NioEventLoopGroup 默认的构造函数会起多少线程的秘密所在
-    // 当指定的线程数nThreads为0时，使用默认的线程数DEFAULT_EVENT_LOOP_THREADS
-    protected MultithreadEventLoopGroup(int nThreads, ThreadFactory threadFactory, Object... args) {
-        super(nThreads == 0 ? DEFAULT_EVENT_LOOP_THREADS : nThreads, threadFactory, args);
-    }
-```
-
-综上，我们发现 `NioEventLoopGroup` 默认的构造函数实际会起的线程数为 **`CPU核心数*2`**。
-
-另外，如果你继续深入下去看构造函数的话，你会发现每个`NioEventLoopGroup`对象内部都会分配一组`NioEventLoop`，其大小是 `nThreads`, 这样就构成了一个线程池， 一个`NIOEventLoop` 和一个线程相对应，这和我们上面说的 `EventloopGroup` 和 `EventLoop`关系这部分内容相对应。
-
-### 5.4.8 Netty 线程模型了解么？
-
-👨‍💻**面试官** ：说一下 Netty 线程模型吧！
-
-🙋 **我** ：大部分网络框架都是基于 Reactor 模式设计开发的。
-
-> Reactor 模式基于事件驱动，采用多路复用将事件分发给相应的 Handler 处理，非常适合处理海量 IO 的场景。
-
-在 Netty 主要靠 `NioEventLoopGroup` 线程池来实现具体的线程模型的 。
-
-我们实现服务端的时候，一般会初始化两个线程组：
-
-1. **`bossGroup`** :接收连接。
-2. **`workerGroup`** ：负责具体的处理，交由对应的 Handler 处理。
-
-下面我们来详细看一下 Netty 中的线程模型吧！
-
-1.**单线程模型** ：
-
-一个线程需要执行处理所有的 `accept`、`read`、`decode`、`process`、`encode`、`send` 事件。对于高负载、高并发，并且对性能要求比较高的场景不适用。
-
-对应到 Netty 代码是下面这样的
-
-> 使用 `NioEventLoopGroup` 类的无参构造函数设置线程数量的默认值就是 **CPU 核心数 \*2** 。
-
-```java
-  //1.eventGroup既用于处理客户端连接，又负责具体的处理。
-  EventLoopGroup eventGroup = new NioEventLoopGroup(1);
-  //2.创建服务端启动引导/辅助类：ServerBootstrap
-  ServerBootstrap b = new ServerBootstrap();
-            boobtstrap.group(eventGroup, eventGroup)
-            //......
-```
-
-2.**多线程模型**
-
-一个 Acceptor 线程只负责监听客户端的连接，一个 NIO 线程池负责具体处理： `accept`、`read`、`decode`、`process`、`encode`、`send` 事件。满足绝大部分应用场景，并发连接量不大的时候没啥问题，但是遇到并发连接大的时候就可能会出现问题，成为性能瓶颈。
-
-对应到 Netty 代码是下面这样的：
-
-```java
-// 1.bossGroup 用于接收连接，workerGroup 用于具体的处理
-EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-EventLoopGroup workerGroup = new NioEventLoopGroup();
-try {
-  //2.创建服务端启动引导/辅助类：ServerBootstrap
-  ServerBootstrap b = new ServerBootstrap();
-  //3.给引导类配置两大线程组,确定了线程模型
-  b.group(bossGroup, workerGroup)
-    //......
-```
-
-![](https://imgkr.cn-bj.ufileos.com/7e7357ef-e724-4122-847c-fbccd9eb6ae3.png)
-
-**3.主从多线程模型**
-
-从一个 主线程 NIO 线程池中选择一个线程作为 Acceptor 线程，绑定监听端口，接收客户端连接的连接，其他线程负责后续的接入认证等工作。连接建立完成后，Sub NIO 线程池负责具体处理 I/O 读写。如果多线程模型无法满足你的需求的时候，可以考虑使用主从多线程模型 。
-
-```java
-// 1.bossGroup 用于接收连接，workerGroup 用于具体的处理
-EventLoopGroup bossGroup = new NioEventLoopGroup();
-EventLoopGroup workerGroup = new NioEventLoopGroup();
-try {
-  //2.创建服务端启动引导/辅助类：ServerBootstrap
-  ServerBootstrap b = new ServerBootstrap();
-  //3.给引导类配置两大线程组,确定了线程模型
-  b.group(bossGroup, workerGroup)
-    //......
-```
-
-![](https://imgkr.cn-bj.ufileos.com/04d0a911-a5c1-4c18-947e-d14b80634510.png)
-
-### 5.4.9 Netty 服务端和客户端的启动过程了解么？
-
-#### 服务端
-
-```java
-        // 1.bossGroup 用于接收连接，workerGroup 用于具体的处理
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            //2.创建服务端启动引导/辅助类：ServerBootstrap
-            ServerBootstrap b = new ServerBootstrap();
-            //3.给引导类配置两大线程组,确定了线程模型
-            b.group(bossGroup, workerGroup)
-                    // (非必备)打印日志
-                    .handler(new LoggingHandler(LogLevel.INFO))
-                    // 4.指定 IO 模型
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) {
-                            ChannelPipeline p = ch.pipeline();
-                            //5.可以自定义客户端消息的业务处理逻辑
-                            p.addLast(new HelloServerHandler());
-                        }
-                    });
-            // 6.绑定端口,调用 sync 方法阻塞知道绑定完成
-            ChannelFuture f = b.bind(port).sync();
-            // 7.阻塞等待直到服务器Channel关闭(closeFuture()方法获取Channel 的CloseFuture对象,然后调用sync()方法)
-            f.channel().closeFuture().sync();
-        } finally {
-            //8.优雅关闭相关线程组资源
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
-        }
-```
-
-简单解析一下服务端的创建过程具体是怎样的：
-
-1.首先你创建了两个 `NioEventLoopGroup` 对象实例：`bossGroup` 和 `workerGroup`。
-
-- `bossGroup` : 用于处理客户端的 TCP 连接请求。
-- `workerGroup` ： 负责每一条连接的具体读写数据的处理逻辑，真正负责 I/O 读写操作，交由对应的 Handler 处理。
-
-举个例子：我们把公司的老板当做 bossGroup，员工当做 workerGroup，bossGroup 在外面接完活之后，扔给 workerGroup 去处理。一般情况下我们会指定 bossGroup 的 线程数为 1（并发连接量不大的时候） ，workGroup 的线程数量为 **CPU 核心数 \*2** 。另外，根据源码来看，使用 `NioEventLoopGroup` 类的无参构造函数设置线程数量的默认值就是 **CPU 核心数 \*2** 。
-
-2.接下来 我们创建了一个服务端启动引导/辅助类： `ServerBootstrap`，这个类将引导我们进行服务端的启动工作。
-
-3.通过 `.group()` 方法给引导类 `ServerBootstrap` 配置两大线程组，确定了线程模型。
-
-通过下面的代码，我们实际配置的是多线程模型，这个在上面提到过。
-
-```java
-    EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-    EventLoopGroup workerGroup = new NioEventLoopGroup();
-```
-
-4.通过`channel()`方法给引导类 `ServerBootstrap`指定了 IO 模型为`NIO`
-
-- `NioServerSocketChannel` ：指定服务端的 IO 模型为 NIO，与 BIO 编程模型中的`ServerSocket`对应
-- `NioSocketChannel` : 指定客户端的 IO 模型为 NIO， 与 BIO 编程模型中的`Socket`对应
-
-  5.通过 `.childHandler()`给引导类创建一个`ChannelInitializer` ，然后指定了服务端消息的业务处理逻辑 `HelloServerHandler` 对象
-
-  6.调用 `ServerBootstrap` 类的 `bind()`方法绑定端口
-
-#### 客户端
-
-```java
-        //1.创建一个 NioEventLoopGroup 对象实例
-        EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            //2.创建客户端启动引导/辅助类：Bootstrap
-            Bootstrap b = new Bootstrap();
-            //3.指定线程组
-            b.group(group)
-                    //4.指定 IO 模型
-                    .channel(NioSocketChannel.class)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            ChannelPipeline p = ch.pipeline();
-                            // 5.这里可以自定义消息的业务处理逻辑
-                            p.addLast(new HelloClientHandler(message));
-                        }
-                    });
-            // 6.尝试建立连接
-            ChannelFuture f = b.connect(host, port).sync();
-            // 7.等待连接关闭（阻塞，直到Channel关闭）
-            f.channel().closeFuture().sync();
-        } finally {
-            group.shutdownGracefully();
-        }
-```
-
-继续分析一下客户端的创建流程：
-
-1.创建一个 `NioEventLoopGroup` 对象实例
-
-2.创建客户端启动的引导类是 `Bootstrap`
-
-3.通过 `.group()` 方法给引导类 `Bootstrap` 配置一个线程组
-
-4.通过`channel()`方法给引导类 `Bootstrap`指定了 IO 模型为`NIO`
-
-5.通过 `.childHandler()`给引导类创建一个`ChannelInitializer` ，然后指定了客户端消息的业务处理逻辑 `HelloClientHandler` 对象
-
-6.调用 `Bootstrap` 类的 `connect()`方法进行连接，这个方法需要指定两个参数：
-
-- `inetHost` : ip 地址
-- `inetPort` : 端口号
-
-```java
-    public ChannelFuture connect(String inetHost, int inetPort) {
-        return this.connect(InetSocketAddress.createUnresolved(inetHost, inetPort));
-    }
-    public ChannelFuture connect(SocketAddress remoteAddress) {
-        ObjectUtil.checkNotNull(remoteAddress, "remoteAddress");
-        this.validate();
-        return this.doResolveAndConnect(remoteAddress, this.config.localAddress());
-    }
-```
-
-`connect` 方法返回的是一个 `Future` 类型的对象
-
-```java
-public interface ChannelFuture extends Future<Void> {
-  ......
-}
-```
-
-也就是说这个方是异步的，我们通过 `addListener` 方法可以监听到连接是否成功，进而打印出连接信息。具体做法很简单，只需要对代码进行以下改动：
-
-```java
-ChannelFuture f = b.connect(host, port).addListener(future -> {
-  if (future.isSuccess()) {
-    System.out.println("连接成功!");
-  } else {
-    System.err.println("连接失败!");
-  }
-}).sync();
-```
-
-### 5.4.10 什么是 TCP 粘包/拆包?有什么解决办法呢？
-
-👨‍💻**面试官** ：什么是 TCP 粘包/拆包?
-
-🙋 **我** ：TCP 粘包/拆包 就是你基于 TCP 发送数据的时候，出现了多个字符串“粘”在了一起或者一个字符串被“拆”开的问题。比如你多次发送：“你好,你真帅啊！哥哥！”，但是客户端接收到的可能是下面这样的：
-
-![](https://imgkr.cn-bj.ufileos.com/07bd8979-2b34-4000-a829-03a74d0701b2.png)
-
-👨‍💻**面试官** ：那有什么解决办法呢?
-
-🙋 **我** ：
-
-**1.使用 Netty 自带的解码器**
-
-- **`LineBasedFrameDecoder`** : 发送端发送数据包的时候，每个数据包之间以换行符作为分隔，`LineBasedFrameDecoder` 的工作原理是它依次遍历 `ByteBuf` 中的可读字节，判断是否有换行符，然后进行相应的截取。
-- **`DelimiterBasedFrameDecoder`** : 可以自定义分隔符解码器，**`LineBasedFrameDecoder`** 实际上是一种特殊的 `DelimiterBasedFrameDecoder` 解码器。
-- **`FixedLengthFrameDecoder`**: 固定长度解码器，它能够按照指定的长度对消息进行相应的拆包。
-- **`LengthFieldBasedFrameDecoder`**：
-
-**2.自定义序列化编解码器**
-
-在 Java 中自带的有实现 `Serializable` 接口来实现序列化，但由于它性能、安全性等原因一般情况下是不会被使用到的。
-
-通常情况下，我们使用 Protostuff、Hessian2、json 序列方式比较多，另外还有一些序列化性能非常好的序列化方式也是很好的选择：
-
-- 专门针对 Java 语言的：Kryo，FST 等等
-- 跨语言的：Protostuff（基于 protobuf 发展而来），ProtoBuf，Thrift，Avro，MsgPack 等等
-
-> 由于篇幅问题，这部分内容会在后续的文章中详细分析介绍~~~
-
-### 5.4.11 Netty 长连接、心跳机制了解么？
-
-👨‍💻**面试官** ：TCP 长连接和短连接了解么？
-
-🙋 **我** ：我们知道 TCP 在进行读写之前，server 与 client 之间必须提前建立一个连接。建立连接的过程，需要我们常说的三次握手，释放/关闭连接的话需要四次挥手。这个过程是比较消耗网络资源并且有时间延迟的。
-
-所谓，短连接说的就是 server 端 与 client 端建立连接之后，读写完成之后就关闭掉连接，如果下一次再要互相发送消息，就要重新连接。短连接的有点很明显，就是管理和实现都比较简单，缺点也很明显，每一次的读写都要建立连接必然会带来大量网络资源的消耗，并且连接的建立也需要耗费时间。
-
-长连接说的就是 client 向 server 双方建立连接之后，即使 client 与 server 完成一次读写，它们之间的连接并不会主动关闭，后续的读写操作会继续使用这个连接。长连接的可以省去较多的 TCP 建立和关闭的操作，降低对网络资源的依赖，节约时间。对于频繁请求资源的客户来说，非常适用长连接。
-
-👨‍💻**面试官** ：为什么需要心跳机制？Netty 中心跳机制了解么？
-
-🙋 **我** ：
-
-在 TCP 保持长连接的过程中，可能会出现断网等网络异常出现，异常发生的时候， client 与 server 之间如果没有交互的话，它们是无法发现对方已经掉线的。为了解决这个问题, 我们就需要引入 **心跳机制** 。
-
-心跳机制的工作原理是: 在 client 与 server 之间在一定时间内没有数据交互时, 即处于 idle 状态时, 客户端或服务器就会发送一个特殊的数据包给对方, 当接收方收到这个数据报文后, 也立即发送一个特殊的数据报文, 回应发送方, 此即一个 PING-PONG 交互。所以, 当某一端收到心跳消息后, 就知道了对方仍然在线, 这就确保 TCP 连接的有效性.
-
-TCP 实际上自带的就有长连接选项，本身是也有心跳包机制，也就是 TCP 的选项：`SO_KEEPALIVE`。 但是，TCP 协议层面的长连接灵活性不够。所以，一般情况下我们都是在应用层协议上实现自定义心跳机制的，也就是在 Netty 层面通过编码实现。通过 Netty 实现心跳机制的话，核心类是 `IdleStateHandler` 。
-
-### 5.4.12 Netty 的零拷贝了解么？
-
-👨‍💻**面试官** ：讲讲 Netty 的零拷贝？
-
-🙋 **我** ：
-
-维基百科是这样介绍零拷贝的：
-
-> 零复制（英语：Zero-copy；也译零拷贝）技术是指计算机执行操作时，CPU 不需要先将数据从某处内存复制到另一个特定区域。这种技术通常用于通过网络传输文件时节省 CPU 周期和内存带宽。
-
-在 OS 层面上的 `Zero-copy` 通常指避免在 `用户态(User-space)` 与 `内核态(Kernel-space)` 之间来回拷贝数据。而在 Netty 层面 ，零拷贝主要体现在对于数据操作的优化。
-
-Netty 中的零拷贝体现在以下几个方面
-
-1. 使用 Netty 提供的 `CompositeByteBuf` 类, 可以将多个`ByteBuf` 合并为一个逻辑上的 `ByteBuf`, 避免了各个 `ByteBuf` 之间的拷贝。
-2. `ByteBuf` 支持 slice 操作, 因此可以将 ByteBuf 分解为多个共享同一个存储区域的 `ByteBuf`, 避免了内存的拷贝。
-3. 通过 `FileRegion` 包装的`FileChannel.tranferTo` 实现文件传输, 可以直接将文件缓冲区的数据发送到目标 `Channel`, 避免了传统通过循环 write 方式导致的内存拷贝问题.
-
-### 参考
-
-- netty 学习系列二：NIO Reactor 模型 & Netty 线程模型：https://www.jianshu.com/p/38b56531565d
-- 《Netty 实战》
-- Netty 面试题整理(2):[https://metatronxl.github.io/2019/10/22/Netty-面试题整理-二/](https://metatronxl.github.io/2019/10/22/Netty-面试题整理-二/)
-- Netty（3）—源码 NioEventLoopGroup:https://www.cnblogs.com/qdhxhz/p/10075568.html
-- 对于 Netty ByteBuf 的零拷贝(Zero Copy) 的理解: [https://www.cnblogs.com/xys1228/p/6088805.html](https://www.cnblogs.com/xys1228/p/6088805.html)
