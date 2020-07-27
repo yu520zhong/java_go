@@ -3,7 +3,7 @@
 * [程序员软实力](./docs/a-1程序员软实力.md)
 * [Java系统知识大纲](./docs/java核心知识大纲.md)
 * Java,Go!
-  * [1-JVM](./docs/o-1第1章_jvm.md)
+  * [1-JVM](./docs/a-1第1章_jvm.md)
   * [2-Java基础_基础知识](./docs/b-1第2章_Java基础_基础知识.md)
   * [2-Java基础_面向对象](./docs/b-1第2章_Java基础_面向对象.md)
   * [2-Java基础_集合](./docs/b-2第2章_Java基础_集合.md)
