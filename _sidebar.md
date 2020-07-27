@@ -9,7 +9,7 @@
   * [2-Java基础_集合](./docs/b-2第2章_Java基础_集合.md)
   * [2-Java基础_异常](./docs/b-2第2章_Java基础_异常.md)
   * [3-Java并发编程](./docs/c-3第3章_Java并发编程.md)
-  * [4-Java多线程](./docs/cb-3Java多线程.md)
+  * [4-Java多线程](./docs/b-3Java多线程.md)
   * [4-数据结构](./docs/o-4第4章_数据结构.md)
   * [6-网络与负载均衡](./docs/c-1计算机网络.md)
   * [7-数据库及分布式事务](./docs/g-7第7章_数据库及分布式事务.md)
